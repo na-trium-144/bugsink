@@ -47,6 +47,14 @@ USE_X_FORWARDED_FOR = False
 X_FORWARDED_FOR_PROXY_COUNT = 0
 
 
+# By default, Django limits the size of the request body and the number of fields in it to avoid DOS attacks.
+# Bugsink however is designed to handle large envelopes (up to 100MB by default) and handles these maximums
+# itself (using its own settings like MAX_ENVELOPE_SIZE), so we disable Django's own limits to avoid
+# double-limit-checking (and to allow the larger envelopes).
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+FILE_UPLOAD_MAX_MEMORY_SIZE = None
+
+
 # Replacing "*" with your actual hostname forms an extra layer of security if your proxy/webserver is misconfigured.
 # The default (production) create-conf template does this for you.
 ALLOWED_HOSTS = ["*"]
@@ -339,6 +347,53 @@ EMAIL_TIMEOUT = 5
 
 
 LOGGING = deepcopy(DEFAULT_LOGGING)
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "filters": {
+#         "require_debug_false": {
+#             "()": "django.utils.log.RequireDebugFalse",
+#         },
+#         "require_debug_true": {
+#             "()": "django.utils.log.RequireDebugTrue",
+#         },
+#     },
+#     "formatters": {
+#         "django.server": {
+#             "()": "django.utils.log.ServerFormatter",
+#             "format": "[{server_time}] {message}",
+#             "style": "{",
+#         }
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "filters": ["require_debug_true"],
+#             "class": "logging.StreamHandler",
+#         },
+#         "django.server": {
+#             "level": "DEBUG",
+#             "class": "logging.StreamHandler",
+#             "formatter": "django.server",
+#         },
+#         "mail_admins": {
+#             "level": "ERROR",
+#             "filters": ["require_debug_false"],
+#             "class": "django.utils.log.AdminEmailHandler",
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console", "mail_admins"],
+#             "level": "DEBUG",
+#         },
+#         "django.server": {
+#             "handlers": ["django.server"],
+#             "level": "DEBUG",
+#             "propagate": False,
+#         },
+#     },
+# }
 
 if I_AM_RUNNING != "TEST":
     # Django's standard logging has LOGGING['handlers']['console']['filters'] = ['require_debug_true']; our app is
