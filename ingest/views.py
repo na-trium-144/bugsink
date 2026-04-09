@@ -130,10 +130,16 @@ class BaseIngestAPIView(View):
         try:
             return self._set_cors_headers(self._post(request, project_pk))
         except MaxLengthExceeded as e:
+            import traceback
+            traceback.print_exc()
             return self._set_cors_headers(JsonResponse({"message": str(e)}, status=HTTP_413_CONTENT_TOO_LARGE))
         except ValidationError as e:
+            import traceback
+            traceback.print_exc()
             return self._set_cors_headers(JsonResponse({"message": str(e)}, status=HTTP_400_BAD_REQUEST))
         except ParseError as e:
+            import traceback
+            traceback.print_exc()
             return self._set_cors_headers(JsonResponse({"message": str(e)}, status=HTTP_400_BAD_REQUEST))
 
     @classmethod
