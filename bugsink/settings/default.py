@@ -346,54 +346,59 @@ SILENCED_SYSTEM_CHECKS = [
 EMAIL_TIMEOUT = 5
 
 
-LOGGING = deepcopy(DEFAULT_LOGGING)
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "filters": {
-#         "require_debug_false": {
-#             "()": "django.utils.log.RequireDebugFalse",
-#         },
-#         "require_debug_true": {
-#             "()": "django.utils.log.RequireDebugTrue",
-#         },
-#     },
-#     "formatters": {
-#         "django.server": {
-#             "()": "django.utils.log.ServerFormatter",
-#             "format": "[{server_time}] {message}",
-#             "style": "{",
-#         }
-#     },
-#     "handlers": {
-#         "console": {
-#             "level": "DEBUG",
-#             "filters": ["require_debug_true"],
-#             "class": "logging.StreamHandler",
-#         },
-#         "django.server": {
-#             "level": "DEBUG",
-#             "class": "logging.StreamHandler",
-#             "formatter": "django.server",
-#         },
-#         "mail_admins": {
-#             "level": "ERROR",
-#             "filters": ["require_debug_false"],
-#             "class": "django.utils.log.AdminEmailHandler",
-#         },
-#     },
-#     "loggers": {
-#         "django": {
-#             "handlers": ["console", "mail_admins"],
-#             "level": "DEBUG",
-#         },
-#         "django.server": {
-#             "handlers": ["django.server"],
-#             "level": "DEBUG",
-#             "propagate": False,
-#         },
-#     },
-# }
+# LOGGING = deepcopy(DEFAULT_LOGGING)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "formatters": {
+        "django.server": {
+            "()": "django.utils.log.ServerFormatter",
+            "format": "[{server_time}] {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG", # レベルを下げる
+            "filters": [],    # フィルタを外して常に出す
+            "class": "logging.StreamHandler",
+        },
+        "django.server": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "django.server",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+        },
+        "django.request": { # django全体ではなくrequestを特定
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["django.server"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
 
 if I_AM_RUNNING != "TEST":
     # Django's standard logging has LOGGING['handlers']['console']['filters'] = ['require_debug_true']; our app is
