@@ -51,8 +51,8 @@ X_FORWARDED_FOR_PROXY_COUNT = 0
 # Bugsink however is designed to handle large envelopes (up to 100MB by default) and handles these maximums
 # itself (using its own settings like MAX_ENVELOPE_SIZE), so we disable Django's own limits to avoid
 # double-limit-checking (and to allow the larger envelopes).
-DATA_UPLOAD_MAX_MEMORY_SIZE = None
-FILE_UPLOAD_MAX_MEMORY_SIZE = None
+DATA_UPLOAD_MAX_MEMORY_SIZE = 9999999999
+FILE_UPLOAD_MAX_MEMORY_SIZE = 9999999999
 
 
 # Replacing "*" with your actual hostname forms an extra layer of security if your proxy/webserver is misconfigured.
